@@ -6,6 +6,7 @@ const app = express();
 
 app.use(express.json());
 
+const stuffRoutes = require("./routes/stuff");
 const userRoutes = require('./routes/user');
 
 require("dotenv").config();
@@ -37,5 +38,7 @@ app.use((req, res, next) => {
 });
 
 // *************** fin de middleware ****************************
+
+app.use('/api/sauces', stuffRoutes);
 app.use('/api/auth', userRoutes);
 module.exports = app;
