@@ -1,3 +1,8 @@
+/*Fichier de modèle de compte. 
+  Avec unique et mongoose-unique-validator empêchent l'enregistrement d'un même compte
+  utilisateur plusieurs fois.
+*/ 
+
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
