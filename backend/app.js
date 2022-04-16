@@ -2,16 +2,17 @@
 
 const express = require("express");
 
-const app = express();
+const mongoose = require("mongoose");
+const path = require('path');
 
-app.use(express.json());
+const app = express();
 
 const stuffRoutes = require("./routes/stuff");
 const userRoutes = require('./routes/user');
 
 require("dotenv").config();
 
-const mongoose = require("mongoose");
+
 
 // Logique de connexion à MongoDB
 mongoose
@@ -38,7 +39,10 @@ app.use((req, res, next) => {
 });
 
 // *************** fin de middleware ****************************
+app.use(express.json());
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/sauces', stuffRoutes);
 app.use('/api/auth', userRoutes);
+
 module.exports = app;

@@ -1,12 +1,13 @@
 // Fichier route
 
 const express = require('express');
-
 const router = express.Router();
 
 const auth = require('../middleware/auth');
+const multer = require('../middleware/multer-config')
 
 const stuffCtrl = require('../controllers/stuff');
+
 
 // *************** Routes *************************
 /* router => appelle express avec la fonction Router
@@ -16,7 +17,7 @@ const stuffCtrl = require('../controllers/stuff');
 */
 
 router.get('/', auth, stuffCtrl.getAllStuff);
-router.post('/', auth, stuffCtrl.createSauce);
+router.post('/', auth, multer, stuffCtrl.createSauce);
 
 
 // *************************************************

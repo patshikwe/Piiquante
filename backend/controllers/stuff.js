@@ -1,6 +1,6 @@
 
 const Sauce = require("../models/Sauce");
-const Thing = require("../models/Sauce");
+const fs = require('fs');
 
 /*createThing() est une fonction ===
   Envoyer l'objet dans la base de données
@@ -11,14 +11,16 @@ const Thing = require("../models/Sauce");
   La méthode save() enregistre simplement votre Thing dans la base de données.
 */
 exports.createSauce = (req, res, next) => {
-    delete req.body._id;
-    const sauce = new Sauce({
-      ...req.body,
-    });
-    sauce.save()
-      .then(() => res.status(201).json({ message: "Objet enregistré !" }))
-      .catch((error) => res.status(400).json({ error }));
-  };
+  const sauceObject = JSON.parse(req.body.sauce);
+  delete sauceObject._id;
+  const sauce = new Sauce({
+    ...sauceObject,
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  });
+  sauce.save()
+    .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
+    .catch(error => res.status(400).json({ error }));
+};
 
 /*getAllStuff() est une fonction ===
   Récupérer la liste des objets dans la base de données
