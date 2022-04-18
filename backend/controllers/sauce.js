@@ -57,12 +57,13 @@ exports.getAllSauces = (req, res, next) => {
   };
 
   // Création like
-  exports.like = (req, res, next) => {
-   let like = req.body.like ;
-   let userId = req.body.userId;
-   let sauceId = req.params.id;
+  exports.likes = (req, res, next) => {
+   const like = req.body.like ;
+   const userId = req.body.userId;
+   const sauceId = req.params.id;
 
    console.log("This is controller like!");
+   console.log(sauceId);
 
    if (like == 1) {
      
