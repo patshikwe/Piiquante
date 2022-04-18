@@ -50,8 +50,22 @@ exports.deleteSauce = (req, res, next) => {
 };
 
 // Récupérer toutes les sauces
-exports.getAllStuff = (req, res, next) => {
+exports.getAllSauces = (req, res, next) => {
     Sauce.find()
       .then((sauces) => res.status(200).json(sauces))
       .catch((error) => res.status(400).json({ error }));
   };
+
+  // Création like
+  exports.like = (req, res, next) => {
+   let like = req.body.like ;
+   let userId = req.body.userId;
+   let sauceId = req.params.id;
+
+   console.log("This is controller like!");
+
+   if (like == 1) {
+     
+   }
+  };
+
