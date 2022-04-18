@@ -62,11 +62,29 @@ exports.getAllSauces = (req, res, next) => {
    const userId = req.body.userId;
    const sauceId = req.params.id;
 
-   console.log("This is controller like!");
-   console.log(sauceId);
+   Sauce.findOne({_id:sauceId})
+      .then((res)=> {
+        /*Si userId n'est pas dans usersLiked et 
+          like est structement égal à 1 
+        */
+        if (!res.usersLiked.includes(userId) && like === 1) {
+         Sauce.updateOne(
+           {_id:sauceId},
+           {$inc: {likes:1}}
+         )
+         .then(() =>{
 
-   if (like == 1) {
-     
-   }
+         })
+         .catch(() =>{
+
+         });
+        }else{
+          console.log("false")
+        }
+      })
+      .catch(() =>{});
+
+   console.log("This is controller like!");
+  
   };
 
