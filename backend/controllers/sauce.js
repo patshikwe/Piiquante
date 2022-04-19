@@ -54,7 +54,7 @@ exports.getAllSauces = (req, res, next) => {
     Sauce.find()
       .then((sauces) => res.status(200).json(sauces))
       .catch((error) => res.status(400).json({ error }));
-  };
+};
 
   // Création like
   exports.likes = (req, res, next) => {
@@ -62,26 +62,78 @@ exports.getAllSauces = (req, res, next) => {
    const userId = req.body.userId;
    const sauceId = req.params.id;
 
-   Sauce.findOne({_id:sauceId})
+  Sauce.findOne({_id:sauceId})
       .then((res)=> {
         /*Si userId n'est pas dans usersLiked et 
-          like est structement égal à 1 
+          like est structement égal à 1 et userId n'est pas dans usersDisliked
         */
-        if (!res.usersLiked.includes(userId) && like === 1) {
-         Sauce.updateOne(
-           {_id: sauceId},
-           { $inc: {likes: 1},
-             $push: {usersLiked: userId}
-           }
-         )
-         .then((res) => res.status(200).json({ message: "J'aime !"}))
-         .catch((error) => res.status(400).json({ error }));
-
+        if (!res.usersLiked.includes(userId) && like === 1 
+          && !res.usersDisliked.includes(userId)) {
+          console.log("like!");
+          Sauce.updateOne(
+            {_id: sauceId},
+            { 
+              $inc: {likes: 1},
+              $push: {usersLiked: userId}
+            }
+          )
+          .then((response) => response.status(200).json({ message: "J'aime!"}))
+          .catch((error) => res.status(400).json({ error }));
         }
+
+        /*Si userId est dans usersLiked et 
+          like est structement égal à 0 
+        */
+        else if (res.usersLiked.includes(userId) && like === 0) {
+          console.log("like annulé!");
+          Sauce.updateOne(
+            {_id: sauceId},
+            { 
+              $inc: {likes: -1},
+              $pull: {usersLiked: userId}
+            }
+          )
+          .then((response) => response.status(201).json({ message: "Like annulé!"}))
+          .catch((error) => res.status(400).json({ error }));
+        }
+
+         /*Si userId n'est pas dans usersDisliked et 
+          like est structement égal à -1 et userId n'est pas dans usersLiked
+        */
+        else if (!res.usersDisliked.includes(userId) && like === -1 
+          && !res.usersLiked.includes(userId)) {
+          console.log("Deslike!");
+          Sauce.updateOne(
+            {_id: sauceId},
+            { 
+              $inc: {dislikes: 1},
+              $push: {usersDisliked: userId}
+            }
+          )
+          .then((response) => response.status(201).json({ message: "Je n'aime pas!"}))
+          .catch((error) => res.status(400).json({ error }));
+        }
+
+         /*Si userId est dans usersDisliked et 
+          like est structement égal à 0 
+        */
+        else if (res.usersDisliked.includes(userId) && like === 0) {
+          console.log("like annulé!");
+          Sauce.updateOne(
+            {_id: sauceId},
+            { 
+              $inc: {dislikes: -1},
+              $pull: {usersDisliked: userId}
+            }
+          )
+          .then((response) => response.status(201).json({ message: "Like annulé!"}))
+          .catch((error) => res.status(400).json({ error }));
+        }
+        
       })
       .catch((error) => res.status(404).json({error}));
 
-   console.log("This is controller like!");
+    console.log("This is controller like!");
   
   };
 
