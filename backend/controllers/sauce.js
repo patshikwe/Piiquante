@@ -69,20 +69,17 @@ exports.getAllSauces = (req, res, next) => {
         */
         if (!res.usersLiked.includes(userId) && like === 1) {
          Sauce.updateOne(
-           {_id:sauceId},
-           {$inc: {likes:1}}
+           {_id: sauceId},
+           { $inc: {likes: 1},
+             $push: {usersLiked: userId}
+           }
          )
-         .then(() =>{
+         .then((res) => res.status(200).json({ message: "J'aime !"}))
+         .catch((error) => res.status(400).json({ error }));
 
-         })
-         .catch(() =>{
-
-         });
-        }else{
-          console.log("false")
         }
       })
-      .catch(() =>{});
+      .catch((error) => res.status(404).json({error}));
 
    console.log("This is controller like!");
   
