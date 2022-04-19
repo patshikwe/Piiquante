@@ -77,7 +77,7 @@ exports.getAllSauces = (req, res, next) => {
               $push: {usersLiked: userId}
             }
           )
-          .then((response) => response.status(200).json({ message: "J'aime!"}))
+          .then((response) => response.status(200).json({ message: "i like!"}))
           .catch((error) => res.status(400).json({ error }));
         }
 
@@ -93,7 +93,7 @@ exports.getAllSauces = (req, res, next) => {
               $pull: {usersLiked: userId}
             }
           )
-          .then((response) => response.status(201).json({ message: "Like annulé!"}))
+          .then((response) => response.status(201).json({ message: "I like, canceled!"}))
           .catch((error) => res.status(400).json({ error }));
         }
 
@@ -102,7 +102,7 @@ exports.getAllSauces = (req, res, next) => {
         */
         else if (!res.usersDisliked.includes(userId) && like === -1 
           && !res.usersLiked.includes(userId)) {
-          console.log("Deslike!");
+          console.log("Dislike!");
           Sauce.updateOne(
             {_id: sauceId},
             { 
@@ -110,7 +110,7 @@ exports.getAllSauces = (req, res, next) => {
               $push: {usersDisliked: userId}
             }
           )
-          .then((response) => response.status(201).json({ message: "Je n'aime pas!"}))
+          .then((response) => response.status(201).json({ message: "I do not like!"}))
           .catch((error) => res.status(400).json({ error }));
         }
 
@@ -118,7 +118,7 @@ exports.getAllSauces = (req, res, next) => {
           like est structement égal à 0 
         */
         else if (res.usersDisliked.includes(userId) && like === 0) {
-          console.log("like annulé!");
+          console.log("dislike annulé!");
           Sauce.updateOne(
             {_id: sauceId},
             { 
@@ -126,14 +126,14 @@ exports.getAllSauces = (req, res, next) => {
               $pull: {usersDisliked: userId}
             }
           )
-          .then((response) => response.status(201).json({ message: "Like annulé!"}))
+          .then((response) => response.status(201).json({ message: "Dislike, canceled!"}))
           .catch((error) => res.status(400).json({ error }));
         }
         
       })
       .catch((error) => res.status(404).json({error}));
 
-    console.log("This is controller like!");
+    console.log("This is controller, i like!");
   
   };
 
