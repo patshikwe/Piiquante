@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
-/*nous appelons la fonction de hachage de bcrypt dans notre mot de passe
+/*Nous appelons la fonction de hachage de bcrypt dans notre mot de passe
  et lui demandons de « saler » le mot de passe 10 fois. 
  Plus la valeur est élevée, plus l'exécution de la fonction sera longue, et plus le hachage sera sécurisé.
  Il s'agit d'une fonction asynchrone qui renvoie une Promise dans laquelle nous recevons le hash généré ;
@@ -26,7 +26,7 @@ exports.signup = (req, res, next) => {
 };
 
 
-/*nous utilisons notre modèle Mongoose pour vérifier que l'e-mail entré par l'utilisateur
+/*Nous utilisons notre modèle Mongoose pour vérifier que l'e-mail entré par l'utilisateur
  correspond à un utilisateur existant de la base de données;
  dans le cas contraire, nous renvoyons une erreur 401 Unauthorized,
  si l'e-mail correspond à un utilisateur existant, nous continuons.
@@ -35,7 +35,7 @@ exports.signup = (req, res, next) => {
  s'ils ne correspondent pas, nous renvoyons une erreur 401 Unauthorized 
  et un message « Mot de passe incorrect ! »,
  s'ils correspondent, les informations d'identification de notre utilisateur sont valides. 
- Dans ce cas, nous renvoyons une réponse 200 contenant l'ID utilisateur et un token. Ce token est une chaîne générique pour l'instant.
+ Dans ce cas, nous renvoyons une réponse 200 contenant l'ID utilisateur et un token.
 */
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })

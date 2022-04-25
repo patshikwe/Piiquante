@@ -57,7 +57,8 @@ exports.getAllSauces = (req, res, next) => {
       .catch((error) => res.status(400).json({ error }));
 };
 
-// Liked (aimé)  *********************************
+// case end if (liked) ******************************
+
 exports.likes = (req, res, next) => {
   const like = req.body.like ;
   const userId = req.body.userId;
@@ -68,75 +69,69 @@ exports.likes = (req, res, next) => {
   .then((obj) => {
     console.log(typeof obj.usersLiked);
 
-    /*Si userId n'est pas dans usersLiked et
-      like est structement égal à 1 et userId n'est pas dans usersDisliked
-    */
-    if (!obj.usersLiked.includes(userId) && like === 1
-      && !obj.usersDisliked.includes(userId)) {
-      console.log("j'aime!");
-      Sauce.updateOne(
-        { _id: sauceId },
-        {
-          $inc: { likes: 1 },
-          $push: { usersLiked: userId }
+    switch (like) {
+      case 1:
+        if (!obj.usersLiked.includes(userId) && 
+          !obj.usersDisliked.includes(userId)) {
+          console.log("j'aime!");
+          Sauce.updateOne(
+            { _id: sauceId },
+            {
+              $inc: { likes: 1 },
+              $push: { usersLiked: userId }
+            }
+          )
+          .then((res) => res.status(200).json({ message: "i like!" }))
+          .catch((error) => res.status(400).json({ error }));
         }
-      )
-      .then((response) => response.status(200).json({ message: "i like!" }))
-      .catch((error) => res.status(400).json({ error }));
-    }
+        break;
 
-    /*Si userId est dans usersLiked et 
-      like est structement égal à 0 
-    */
-    else if (obj.usersLiked.includes(userId) && like === 0) {
-      console.log("like annulé!");
-      Sauce.updateOne(
-        {_id: sauceId},
-        { 
-          $inc: {likes: -1},
-          $pull: {usersLiked: userId}
+      case 0:
+        if (obj.usersLiked.includes(userId)) {
+          console.log("like annulé!");
+          Sauce.updateOne(
+            {_id: sauceId},
+            { 
+              $inc: {likes: -1},
+              $pull: {usersLiked: userId}
+            }
+          )
+          .then((res) => res.status(201).json({ message: "I like, canceled!"}))
+          .catch((error) => res.status(400).json({ error }));
         }
-      )
-      .then((response) => response.status(201).json({ message: "I like, canceled!"}))
-      .catch((error) => res.status(400).json({ error }));
-    }
-
-    /*Si userId n'est pas dans usersDisliked et 
-      like est structement égal à -1 et userId n'est pas dans usersLiked
-    */
-    else if (!obj.usersDisliked.includes(userId) && like === -1 
-      && !obj.usersLiked.includes(userId)) {
-      console.log("Dislike!");
-      Sauce.updateOne(
-        {_id: sauceId},
-        { 
-          $inc: {dislikes: 1},
-          $push: {usersDisliked: userId}
+        else if (obj.usersDisliked.includes(userId)) {
+          console.log("dislike annulé!");
+          Sauce.updateOne(
+            {_id: sauceId},
+            { 
+              $inc: {dislikes: -1},
+              $pull: {usersDisliked: userId}
+            }
+          )
+          .then((res) => res.status(201).json({ message: "Dislike, canceled!"}))
+          .catch((error) => res.status(400).json({ error }));
         }
-      )
-      .then((response) => response.status(201).json({ message: "I do not like!"}))
-      .catch((error) => res.status(400).json({ error }));
-    }
-
-     /*Si userId est dans usersDisliked et 
-      like est structement égal à 0 
-    */
-    else if (obj.usersDisliked.includes(userId) && like === 0) {
-      console.log("dislike annulé!");
-      Sauce.updateOne(
-        {_id: sauceId},
-        { 
-          $inc: {dislikes: -1},
-          $pull: {usersDisliked: userId}
+        break;
+    
+      case -1:
+        if (!obj.usersDisliked.includes(userId) 
+          && !obj.usersLiked.includes(userId)) {
+          console.log("Dislike!");
+          Sauce.updateOne(
+            {_id: sauceId},
+            { 
+              $inc: {dislikes: 1},
+              $push: {usersDisliked: userId}
+            }
+          )
+          .then((res) => res.status(201).json({ message: "I do not like!"}))
+          .catch((error) => res.status(400).json({ error }));
         }
-      )
-      .then((response) => response.status(201).json({ message: "Dislike, canceled!"}))
-      .catch((error) => res.status(400).json({ error }));
+        break;
     }
   })
   .catch(error => res.status(500).json({ error }));
 };
-
 
 
 
