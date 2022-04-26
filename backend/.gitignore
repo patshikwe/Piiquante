@@ -1,3 +1,5 @@
+# Ce dossier contient les dossiers et fichiers non suivis par GITHUB
+
 node_modules
 .env
 images

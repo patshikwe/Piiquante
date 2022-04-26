@@ -57,18 +57,25 @@ exports.getAllSauces = (req, res, next) => {
       .catch((error) => res.status(400).json({ error }));
 };
 
-// switch end if (liked) ******************************
-
+// Middleware pour liké (liked) ******************************
+/**
+ * @param {Number} like 
+ * @param {string} userId
+ * @param {string} sauceId
+ * @param {object} usersLiked
+ * @param {object} usersDisliked
+ * @param $inc  incrémente un champ d'une valeur spécifiée. 
+ * @param $push ajoute une valeur spécifiée à un tableau.
+ * @param $pull supprime d'un tableau existant toutes les instances d'une valeur 
+ * ou de valeurs qui correspondent à une condition spécifiée.
+ */
 exports.likes = (req, res, next) => {
   const like = req.body.like ;
   const userId = req.body.userId;
   const sauceId = req.params.id;
-  console.log("like!");
-  console.log(like);
   
     switch (like) {
       case 1:
-          console.log("j'aime!");
           Sauce.updateOne(
             { _id: sauceId },
             {
@@ -76,17 +83,14 @@ exports.likes = (req, res, next) => {
               $push: { usersLiked: userId },
             }
           )
-            .then(() => res.status(200).json({ message: "i like!" }))
+            .then(() => res.status(200).json({ message: "J'aime!" }))
             .catch((error) => res.status(400).json({ error }));
         break;
 
       case 0:
         Sauce.findOne({ _id: sauceId })
-          .then((obj) => {
-            console.log(typeof obj.usersLiked);
-
-            if (obj.usersLiked.includes(userId)) {
-              console.log("like annulé!");
+          .then((sauce) => {
+            if (sauce.usersLiked.includes(userId)) {
               Sauce.updateOne(
                 { _id: sauceId },
                 {
@@ -95,11 +99,10 @@ exports.likes = (req, res, next) => {
                 }
               )
                 .then(() =>
-                  res.status(200).json({ message: "I like, canceled!" })
+                  res.status(200).json({ message: "J'aime, annulé." })
                 )
                 .catch((error) => res.status(400).json({ error }));
-            } else if (obj.usersDisliked.includes(userId)) {
-              console.log("dislike annulé!");
+            } else if (sauce.usersDisliked.includes(userId)) {
               Sauce.updateOne(
                 { _id: sauceId },
                 {
@@ -108,7 +111,7 @@ exports.likes = (req, res, next) => {
                 }
               )
                 .then(() =>
-                  res.status(200).json({ message: "Dislike, canceled!" })
+                  res.status(200).json({ message: "Je n'aime pas, annulé." })
                 )
                 .catch((error) => res.status(400).json({ error }));
             }
@@ -117,7 +120,6 @@ exports.likes = (req, res, next) => {
         break;
 
       case -1:
-          console.log("Dislike!");
           Sauce.updateOne(
             { _id: sauceId },
             {
@@ -125,7 +127,7 @@ exports.likes = (req, res, next) => {
               $push: { usersDisliked: userId },
             }
           )
-            .then(() => res.status(201).json({ message: "I do not like!" }))
+            .then(() => res.status(200).json({ message: "Je n'aime pas!" }))
             .catch((error) => res.status(400).json({ error }));
         break;
     }

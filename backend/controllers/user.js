@@ -7,8 +7,8 @@ const jwt = require('jsonwebtoken');
 /*Nous appelons la fonction de hachage de bcrypt dans notre mot de passe
  et lui demandons de « saler » le mot de passe 10 fois. 
  Plus la valeur est élevée, plus l'exécution de la fonction sera longue, et plus le hachage sera sécurisé.
- Il s'agit d'une fonction asynchrone qui renvoie une Promise dans laquelle nous recevons le hash généré ;
- dans notre bloc then , nous créons un utilisateur et l'enregistrons dans la base de données, 
+ Cette fonction asynchrone qui renvoie une Promise dans laquelle nous recevons le hash généré dans le then. 
+ Nous créons un utilisateur et l'enregistrons dans la base de données, 
  en renvoyant une réponse de réussite en cas de succès, et des erreurs avec le code d'erreur en cas d'échec.
 */
 exports.signup = (req, res, next) => {

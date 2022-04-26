@@ -1,3 +1,5 @@
+// Fichier serveur
+
 const http = require('http');
 const app = require('./app');
 
@@ -34,7 +36,6 @@ const errorHandler = error => {
         default:
             throw error;
     }
-
 };
 
 const server = http.createServer(app);
