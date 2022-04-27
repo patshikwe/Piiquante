@@ -11,7 +11,7 @@ const sauceCtrl = require('../controllers/sauce');
 
 // *************** Routes *************************
 /* router => appelle express avec la fonction Router
-   la méthode => get;post
+   la méthode => get;post;put;delete
    sauceCtrl renvoie au dossier controllers/sauce.js
    le point relie la fonction, la nomination de la fonction fait référence à son rôle.
 */
