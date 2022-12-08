@@ -1,11 +1,13 @@
 // Fichier d'authentification 
 
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
 
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'DB_SECRET_WORD');
+    const decodedToken = jwt.verify(token, `${DB_SECRET_WORD}`);
     const userId = decodedToken.userId;
     req.auth = {userId};
     if (req.body.userId && req.body.userId !== userId) {

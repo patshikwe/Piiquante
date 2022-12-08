@@ -1,4 +1,4 @@
-//   Ces sont des variables d'environnement
+// Ces sont des variables d'environnement à remplir
 
 DB_USER="#####"
 DB_PASSWORD="#####"
