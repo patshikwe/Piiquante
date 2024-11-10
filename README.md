@@ -1,4 +1,4 @@
-# tshimpakakwekwepatrick_6_04042022
+# Piiquante
 ## Contexte du projet
 ~~~~
 Piiquante se dédie à la création de sauces épicées dont les recettes sont gardées
